@@ -1,0 +1,218 @@
+npm init -y -- to install package.json
+
+use module type (in package.json) for "import express from "express" " instead of const express = require("express"); this is commonjs instead of module type 
+
+app.listen .. for creating server
+
+app.get ... for creating api with get functionality
+
+app.get("/api/notes",(req,res)=>{
+   res.send("hii there");
+})
+
+
+// status code 200 means that the task was successfull
+// app.get("/api/notes", (req, res) => {
+//     res.status[200].send("you got notes");
+// })
+// app.post("/api/notes", (req, res) => {
+//     res.status[201].send("you got notes");
+// })
+
+
+//status code 300 means redirection error
+
+//status code 400 means you as a client have fucked up such as unauth etc
+
+400: Bad request - the request is malformed or invalid
+
+401: Unauthorized - You must log in(missing or invalid credentials)
+
+403: Forbidden - You're not allowed to access this
+
+404 Not Found - The URL doesn't exist
+
+429 Too many requests
+
+server errors uses 500 : server fucked up
+
+500: Internal Server Error - Something broke on server
+
+503: Service Unavailable - Server is temporarily overloaded or down 
+
+/////////////////////////////////////////////////////
+
+for production 
+
+changes in package.json below dev in scripts
+
+"start" : "node server"
+
+/////////////////////////////////////////////////////
+
+best practices
+
+separate routes , functions in different files
+
+create everything under src folder 
+
+
+//routing 
+
+//basic router code 
+
+import express from "express";
+
+const router = express.Router();
+
+router.get / .put /.delete /.post  // for functions depending upon the work you need
+
+export default router;
+
+
+// controllers 
+
+controllers are used to store the functions in them 
+
+such (req,res) => {res.send("hii there")}
+
+// basic syntax for controllers 
+
+export function fetchALL(req, res)=>{}
+        
+               OR 
+
+const fetchALL = (req,res)=>{}
+
+export fetchALL;
+
+
+// working with mongoDB
+
+// connecting with the mongodb
+
+create config then in that db.js
+
+import mongoose from "mongoose";
+
+export const connectDB = async () => {
+    try {
+
+        await mongoose.connect(process.env.MONGO_URL)
+
+        console.log("MongoDb connected");
+
+    } catch (error) {
+        console.log("Error in mongodb connection", error);
+    }
+}
+
+basic db code then create models 
+
+import mongoose from "mongoose";
+
+// create schema
+// create model of that schema 
+
+const noteSchema = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        content: {
+            type: String,
+            required: true,
+        }
+    },
+    { timestamps: true }
+)
+
+const Note = mongoose.model("Note", noteSchema)
+
+export default Note;
+
+
+// use async and await when the function is returning promises
+
+// this is used for getting the information of var present in the .env rather then getting undefined
+// console.log(process.env.MONGO_URL);           
+
+
+// express.json() this acts a middleware where 
+the data can be processed and it would show real data rather than undefined
+
+
+Middleware is the function that runs between the req and res.
+
+rate limiting 
+
+Rate limiting is a way to control how often someone can do something on a website or app like how many times they can refresh a page, make a request to an API, or try to Log in.
+
+such as only 100 requests per user every 15 mins 
+
+it prevents from too many requests and server overloading
+
+
+using upstash for rate limiting
+
+
+
+
+///////////////////////////////////////////////////////
+frontend
+
+//////////////////////////////////////////////////////////
+
+create react app 
+then remove all the old code and create folder of pages and in that create all the pages you want in the project.
+
+add routes by using <Routes> in app.jsx
+
+
+ <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/create" element={<Createpage />} />
+        <Route path="/Note/:id" element={<NoteDetailPage />} />
+      </Routes>
+
+this way you can add routes to the pages
+
+
+setup hot-toast -- very easy using toaster and toast
+
+setup tailwindcss and then daisyui older version both
+
+
+use daisy Ui for components and time saving
+
+then  setup the names of theme you want in the tailwind config 
+
+then use data theme = "" ,, to get the required theme 
+
+/// creating the pages
+
+1. HomePage
+
+note: don't be a dumbass and focus on things also with syntax 
+
+Always build code in components form such as successful or rate-limited
+
+create components and work use states with them
+
+use axios to get, post and all http methods
+
+setup cors : browser blocks when you want to communicate between frontend and backend 
+
+app.use(cors()) this will allow every port to communicate with the backend 
+
+where as 
+
+app.use(cors({
+origin:"http://localhost:5173"
+})) this will specifically talk with the given port 
+
+use states for fetching and memory , always note use curve brackets when rendering <div>'s
+
+
+ 
