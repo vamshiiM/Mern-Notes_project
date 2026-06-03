@@ -5,20 +5,25 @@ import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import rateLimiter from "./middleware/ratelimiter.js";
 import cors from "cors";
+import path from "path"
 
 
 dotenv.config(); // for environment variables
 
 const app = express();
 const port = process.env.PORT
+const __dirname = path.resolve()
+
 // connectDB();
 
 // this is used for getting the information of var present in the .env rather then getting undefined
 // console.log(process.env.MONGO_URL);
 
-app.use(cors({
-    origin: "http://localhost:5173"
-}));
+if (process.env.NODE_ENV !== "production") {
+    app.use(cors({
+        origin: "http://localhost:5173"
+    }));
+}
 // this acts as a middleware which processes the data and doesn't show undefined as default while accessing data or consol loging 
 app.use(express.json());
 
@@ -38,6 +43,16 @@ app.use(rateLimiter);
 // used for routing
 app.use("/tp", tpRoutes);
 app.use("/api/notes", notesRoutes)
+
+// for production
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist")))
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    })
+}
 
 // this says if you get get request on "/api/notes" then send "you got notes"
 // app.get("/api/notes", (req, res) => {
