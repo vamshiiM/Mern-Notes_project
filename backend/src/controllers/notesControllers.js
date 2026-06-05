@@ -42,13 +42,13 @@ export async function createNote(req, res) {
 
         const { title, content } = req.body;
         // express.json() works in here 
-        console.log(title, content);
+        // console.log(title, content);
 
         // creating new document
         const newNote = new Note({ title, content });
 
         await newNote.save();
-        res.status(201).json({ message: "Note created succesfully" });
+        res.status(201).json({ message: "Note created successfully" });
 
         // This can also be done but it is optional , it would return the saved data 
         // const savedNote = await newNote.save()
